@@ -1,0 +1,84 @@
+import pandas as pd
+
+configfile: "config/config.yaml"
+
+metadata = pd.read_table(config["metadata"]).set_index("Sample name", drop=False)
+SAMPLES = pd.read_table(config["samples"]).set_index("Sample", drop=False).join(metadata)
+VARIANTS = config["variants"] 
+
+rule all:
+    input:
+        expand("results/{variant}/{sample}/{sample}_realigned.bam", variant=VARIANTS, sample=SAMPLES.index),
+        expand("results/{variant}/{sample}/{sample}_realigned.bam.bai", variant=VARIANTS, sample=SAMPLES.index)
+
+rule test:
+    input:
+        "results/{}/{}/{}_realigned.bam".format(VARIANTS[0], SAMPLES.index[0], SAMPLES.index[0]),
+        "results/{}/{}/{}_realigned.bam.bai".format(VARIANTS[0], SAMPLES.index[0], SAMPLES.index[0])
+
+rule download_reference:
+    output:
+        fa="resources/reference/GRCh38.fa",
+        fai="resources/reference/GRCh38.fa.fai"
+    cache: True
+    shell:
+        "wget -O {output[fa]} {config[ref][host]}{config[ref][fa_path]} &&"
+        "wget -O {output[fai]} {config[ref][host]}{config[ref][fai_path]}"
+
+rule download_cram:
+    output:
+        "resources/cram/{sample}.cram"
+    params:
+        download_path=lambda wildcards: SAMPLES.loc[wildcards['sample'], 'url']
+    cache: True
+    shell:
+        "wget -O {output} {params.download_path}"
+
+rule download_crai:
+    output:
+        "resources/cram/{sample}.cram.crai"
+    params:
+        download_path=lambda wildcards: SAMPLES.loc[wildcards['sample'], 'url']
+    cache: True
+    shell:
+        "wget -O {output} {params.download_path}.crai"
+    
+rule genotype_sample:
+    input:
+        cram="resources/cram/{sample}.cram",
+        crai="resources/cram/{sample}.cram.crai",
+        fa="resources/reference/GRCh38.fa",
+        fai="resources/reference/GRCh38.fa.fai",
+        var="resources/variant/{variant}.json"
+    params:
+        sex=lambda wildcards: SAMPLES.loc[wildcards['sample'], 'Sex'],
+        prefix=lambda wildcards, output: output.json.split[:-5]
+    output:
+        json=protected("results/{variant}/{sample}/{sample}.json"),
+        vcf=protected("results/{variant}/{sample}/{sample}.vcf"),
+        bam=protected("results/{variant}/{sample}/{sample}_realigned.bam"),
+    conda:
+        "envs/expansionhunter.yaml"
+    envmodules:
+        "expansionhunter/4.0.2"
+    log:
+        "logs/expansionhunter/{variant}/{sample}.log"
+    cache: True
+    shell:
+        "ExpansionHunter --reads {input.cram} "
+        "--reference {input.fa} "
+        "--variant-catalog {input.var} "
+        "--output-prefix {params.prefix} "
+        "--sex {params.sex}"
+
+rule index_realigned_bam:
+    input:
+        "results/{variant}/{sample}/{sample}_realigned.bam"
+    output:
+        protected("results/{variant}/{sample}/{sample}_realigned.bam.bai")
+    log:
+        "logs/samtools_index/{variant}/{sample}.log"
+    cache: True
+    threads: 4
+    wrapper:
+        "0.77.0/bio/samtools/index"

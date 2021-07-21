@@ -1,0 +1,8 @@
+variants:
+  - active
+samples: config/samples.tsv
+metadata: config/metadata.tsv
+ref:
+  host: ftp://ftp.sra.ebi.ac.uk
+  fa_path: /1000g/ftp/technical/reference/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa
+  fai_path: /1000g/ftp/technical/reference/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa.fai
