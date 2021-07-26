@@ -15,6 +15,7 @@ rule genotype_sample:
     params:
         sex=lambda wildcards: METADATA.loc[wildcards['sample'], 'Sex'],
         prefix=lambda wildcards, output: output.json.split[:-5]
+        mode=config['expansionhunter_mode']
     output:
         json=temp("results/{variant}/{sample}/{sample}.{n}.json"),
         vcf=temp("results/{variant}/{sample}/{sample}.{n}.vcf"),
@@ -35,5 +36,5 @@ rule genotype_sample:
         "--variant-catalog {input.var} "
         "--output-prefix {params.prefix} "
         "--sex {params.sex} "
-        "--analysis-mode streaming "
+        "--analysis-mode {params.mode} "
         "2> {log.stderr} 1> {log.stdout}"

@@ -1,3 +1,5 @@
+localrules: split_variant_catalog, merge_eh_vcf, merge_eh_json
+
 N = range(0, config["n_chunks"])
 
 rule split_variant_catalog:

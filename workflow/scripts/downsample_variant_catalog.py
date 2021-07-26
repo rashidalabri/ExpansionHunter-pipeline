@@ -35,4 +35,3 @@ else:
 
 with open(snakemake.output[0], 'w', encoding='utf-8') as f:
     json.dump(downsampled, f, indent=4)
-

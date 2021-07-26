@@ -1,5 +1,6 @@
 variants:
   - active
+expansionhunter_mode: seeking
 downsample: true
 downsample_to_size: 1000
 downsample_seed: 1
