@@ -1,4 +1,4 @@
-localrules: downsample_variant_catalog, filter_variant_catalog
+localrules: downsample_variant_catalog
 
 rule downsample_variant_catalog:
     input:
