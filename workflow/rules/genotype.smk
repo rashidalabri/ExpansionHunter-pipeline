@@ -14,14 +14,14 @@ rule genotype_sample:
         var="resources/variant_catalog/chunked/{variant}/{variant}.{n}.json"
     params:
         sex=lambda wildcards: METADATA.loc[wildcards['sample'], 'Sex'],
-        prefix=lambda wildcards, output: output.json.split[:-5]
+        prefix=lambda wildcards, output: output.json[:-5],
         mode=config['expansionhunter_mode']
     output:
         json=temp("results/{variant}/{sample}/{sample}.{n}.json"),
         vcf=temp("results/{variant}/{sample}/{sample}.{n}.vcf"),
         bam=temp("results/{variant}/{sample}/{sample}_realigned.{n}.bam"),
     conda:
-        "envs/expansionhunter.yaml"
+        "../envs/expansionhunter.yaml"
     envmodules:
         "expansionhunter/4.0.2"
     log:
