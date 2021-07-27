@@ -17,9 +17,9 @@ rule genotype_sample:
         prefix=lambda wildcards, output: output.json[:-5],
         mode=config['expansionhunter_mode']
     output:
-        json=temp("results/{variant}/{sample}/{sample}.{n}.json"),
-        vcf=temp("results/{variant}/{sample}/{sample}.{n}.vcf"),
-        bam=temp("results/{variant}/{sample}/{sample}_realigned.{n}.bam"),
+        json=temp("results/{variant}/{sample}/{sample}_{n}.json"),
+        vcf=temp("results/{variant}/{sample}/{sample}_{n}.vcf"),
+        bam=temp("results/{variant}/{sample}/{sample}_{n}_realigned.bam"),
     conda:
         "../envs/expansionhunter.yaml"
     envmodules:
