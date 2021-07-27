@@ -10,9 +10,24 @@ rule split_variant_catalog:
     script:
         "../scripts/split_variant_catalog.py"
 
+rule sort_eh_realigned_bams:
+    input:
+        "results/{variant}/{sample}/{sample}_{n}_realigned.bam"
+    output:
+        "results/{variant}/{sample}/{sample}_{n}_realigned.sorted.bam"
+    params:
+        extra = "-m 4G",
+        tmp_dir = "/tmp/"
+    resources:
+        mem_mb=6144
+    threads:  # Samtools takes additional threads through its option -@
+        8     # This value - 1 will be sent to -@.
+    wrapper:
+        "0.77.0/bio/samtools/sort"
+
 rule merge_eh_realigned_bam:
     input:
-        expand("results/{variant}/{sample}/{sample}_realigned.{n}.bam", n=N, allow_missing=True)
+        expand("results/{variant}/{sample}/{sample}_{n}_realigned.sorted.bam", n=N, allow_missing=True)
     output:
         protected("results/{variant}/{sample}/{sample}_realigned.bam")
     threads: 8
@@ -21,17 +36,15 @@ rule merge_eh_realigned_bam:
 
 rule merge_eh_vcf:
     input:
-        calls=expand("results/{variant}/{sample}/{sample}.{n}.vcf", n=N, allow_missing=True)
+        calls=expand("results/{variant}/{sample}/{sample}_{n}.vcf", n=N, allow_missing=True)
     output:
         protected("results/{variant}/{sample}/{sample}.vcf")
-    params:
-        ""  # optional parameters for bcftools concat (except -o)
     wrapper:
         "0.77.0/bio/bcftools/merge"
 
 rule merge_eh_json:
     input:
-        expand("results/{variant}/{sample}/{sample}.{n}.json", n=N, allow_missing=True)
+        expand("results/{variant}/{sample}/{sample}_{n}.json", n=N, allow_missing=True)
     output:
         protected("results/{variant}/{sample}/{sample}.json")
     script:

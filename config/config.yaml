@@ -1,6 +1,6 @@
 variants:
   - active
-expansionhunter_mode: seeking
+expansionhunter_mode: streaming
 downsample: true
 downsample_to_size: 1000
 downsample_seed: 1
