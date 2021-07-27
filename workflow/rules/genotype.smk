@@ -27,9 +27,9 @@ rule genotype_sample:
     log:
         stdout="logs/expansionhunter/{variant}/{sample}/{sample}.{n}.stdout.log",
         stderr="logs/expansionhunter/{variant}/{sample}/{sample}.{n}.stderr.log"
-    cache: True
     resources:
-        mem_mb=get_genotype_mem_mb
+        mem_mb=get_genotype_mem_mb,
+        disk_mb=get_download_cram_disk_mb
     shell:
         "ExpansionHunter --reads {input.cram} "
         "--reference {input.fa} "

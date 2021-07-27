@@ -4,7 +4,7 @@ expansionhunter_mode: seeking
 downsample: true
 downsample_to_size: 1000
 downsample_seed: 1
-n_chunks: 300
+n_chunks: 5
 samples: config/samples.tsv
 metadata: config/metadata.tsv
 ref:
