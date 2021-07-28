@@ -3,6 +3,7 @@ import pandas as pd
 configfile: "config/config.yaml"
 
 include: "rules/common.smk"
+include: "rules/download.smk"
 include: "rules/genotype.smk"
 include: "rules/parallelism.smk"
 include: "rules/variant_catalog.smk"

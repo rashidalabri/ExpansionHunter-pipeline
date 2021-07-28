@@ -1,9 +1,9 @@
 rule genotype_sample:
     input:
-        cram=get_sample_cram_path_ftp,
-        crai=get_sample_crai_path_ftp,
-        fa=FTP.remote(config["ref"]["fa"]),
-        fai=FTP.remote(config["ref"]["fai"]),
+        cram="resources/cram/{sample}/{sample}.cram",
+        crai="resources/cram/{sample}/{sample}.cram.crai",
+        fa="resources/reference/GRCh38.fa",
+        fai="resources/reference/GRCh38.fa.fai",
         var="resources/variant_catalog/chunked/{variant}/{variant}.{n}.json"
     params:
         sex=lambda wildcards: METADATA.loc[wildcards['sample'], 'Sex'],
