@@ -36,7 +36,7 @@ rule download_sample_crai:
 
 rule build_ref_cache:
     input:
-        script="workflow/scripts/seq_cache_populate.pl"
+        script="workflow/scripts/seq_cache_populate.pl",
         fa="resources/reference/GRCh38.fa",
         fai="resources/reference/GRCh38.fa.fai"
     output:
