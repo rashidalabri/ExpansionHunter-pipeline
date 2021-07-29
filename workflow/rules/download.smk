@@ -36,11 +36,14 @@ rule download_sample_crai:
 
 rule build_ref_cache:
     input:
+        script="workflow/scripts/seq_cache_populate.pl"
         fa="resources/reference/GRCh38.fa",
         fai="resources/reference/GRCh38.fa.fai"
     output:
         directory("resources/reference/ref_cache")
     conda:
         "../envs/perl.yaml"
+    envmodules:
+        "perl/5.30.2"
     shell:
-        "perl ../scripts/seq_cache_populate.pl -root {output} {input.fa}"
+        "perl {input.script} -root {output} {input.fa}"
