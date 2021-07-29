@@ -4,7 +4,7 @@ rule genotype_sample:
         crai="resources/cram/{sample}/{sample}.cram.crai",
         fa="resources/reference/GRCh38.fa",
         fai="resources/reference/GRCh38.fa.fai",
-        ref_cache=directory("resources/reference/ref_cache")
+        ref_cache=directory("resources/reference/ref_cache"),
         var="resources/variant_catalog/chunked/{variant}/{variant}.{n}.json"
     params:
         sex=lambda wildcards: METADATA.loc[wildcards['sample'], 'Sex'],
