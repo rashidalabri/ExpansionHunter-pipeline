@@ -7,6 +7,7 @@ downsample: true
 downsample_seed: 1
 downsample_to_size: 200
 n_chunks: 4
-reference_url:
-  fa: ftp://ftp.sra.ebi.ac.uk/1000g/ftp/technical/reference/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa
-  fai: ftp://ftp.sra.ebi.ac.uk/1000g/ftp/technical/reference/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa.fai
+reference_s3_url:
+  fa: 1000genomes/technical/reference/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa
+  fai: 1000genomes/technical/reference/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa.fai
+eh_analysis_mode: seeking
