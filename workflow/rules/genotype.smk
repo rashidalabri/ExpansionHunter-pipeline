@@ -16,11 +16,11 @@ rule genotype_sample:
         bam=temp("results/{variant}/{sample}/{sample}_{n}_realigned.bam"),
     conda:
         "../envs/expansionhunter.yaml"
-    envmodules:
-        "expansionhunter/4.0.2"
     log:
         stdout="logs/expansionhunter/{variant}/{sample}/{sample}.{n}.stdout.log",
         stderr="logs/expansionhunter/{variant}/{sample}/{sample}.{n}.stderr.log"
+    resources:
+        mem_mb=2046
     shell:
         "export REF_PATH='{input.ref_cache}/%2s/%2s/%s:http://www.ebi.ac.uk/ena/cram/md5/%s' && "
         "export REF_CACHE='{input.ref_cache}/%2s/%2s/%s' && "
