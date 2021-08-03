@@ -20,7 +20,7 @@ rule genotype_sample:
         stdout="logs/expansionhunter/{variant}/{sample}/{sample}.{n}.stdout.log",
         stderr="logs/expansionhunter/{variant}/{sample}/{sample}.{n}.stderr.log"
     resources:
-        mem_mb=2046
+        mem_mb=4096
     shell:
         "export REF_PATH='{input.ref_cache}/%2s/%2s/%s:http://www.ebi.ac.uk/ena/cram/md5/%s' && "
         "export REF_CACHE='{input.ref_cache}/%2s/%2s/%s' && "
