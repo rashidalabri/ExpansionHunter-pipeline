@@ -14,13 +14,13 @@ rule genotype_sample:
         json=temp("results/{variant}/{sample}/{sample}_{n}.json"),
         vcf=temp("results/{variant}/{sample}/{sample}_{n}.vcf"),
         bam=temp("results/{variant}/{sample}/{sample}_{n}_realigned.bam"),
-    conda:
-        "../envs/expansionhunter.yaml"
+    singularity:
+        "docker://rashidalabri/expansionhunter"
     log:
-        stdout="logs/expansionhunter/{variant}/{sample}/{sample}.{n}.stdout.log",
-        stderr="logs/expansionhunter/{variant}/{sample}/{sample}.{n}.stderr.log"
+        "logs/expansionhunter/{variant}/{sample}/{sample}.{n}.log"
     resources:
-        mem_mb=4096
+        mem=64,
+        runtime=24
     shell:
         "export REF_PATH='{input.ref_cache}/%2s/%2s/%s:http://www.ebi.ac.uk/ena/cram/md5/%s' && "
         "export REF_CACHE='{input.ref_cache}/%2s/%2s/%s' && "
@@ -30,4 +30,4 @@ rule genotype_sample:
         "--output-prefix {params.prefix} "
         "--sex {params.sex} "
         "--analysis-mode {params.mode} "
-        "2> {log.stderr} 1> {log.stdout}"
+        "> {log}"

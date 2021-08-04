@@ -16,10 +16,10 @@ rule sort_eh_realigned_bams:
     output:
         "results/{variant}/{sample}/{sample}_{n}_realigned.sorted.bam"
     params:
-        extra = "-m 4G",
+        extra = "-m 6G",
         tmp_dir = "/tmp/"
     resources:
-        mem_mb=6144
+        mem=7
     threads:  # Samtools takes additional threads through its option -@
         8     # This value - 1 will be sent to -@.
     wrapper:
@@ -30,6 +30,8 @@ rule merge_eh_realigned_bam:
         expand("results/{variant}/{sample}/{sample}_{n}_realigned.sorted.bam", n=N, allow_missing=True)
     output:
         protected("results/{variant}/{sample}/{sample}_realigned.bam")
+    resources:
+        mem=6
     threads: 8
     wrapper:
         "0.77.0/bio/samtools/merge"
