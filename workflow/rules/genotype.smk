@@ -14,13 +14,14 @@ rule genotype_sample:
         json=temp("results/{variant}/{sample}/{sample}_{n}.json"),
         vcf=temp("results/{variant}/{sample}/{sample}_{n}.vcf"),
         bam=temp("results/{variant}/{sample}/{sample}_{n}_realigned.bam"),
+    conda:
+        "../envs/expansionhunter.yaml"
     singularity:
         "docker://rashidalabri/expansionhunter"
     log:
         "logs/expansionhunter/{variant}/{sample}/{sample}.{n}.log"
     resources:
-        mem=64,
-        runtime=24
+        mem_mb=get_genotype_mem_mb
     shell:
         "export REF_PATH='{input.ref_cache}/%2s/%2s/%s:http://www.ebi.ac.uk/ena/cram/md5/%s' && "
         "export REF_CACHE='{input.ref_cache}/%2s/%2s/%s' && "

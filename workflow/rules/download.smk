@@ -21,6 +21,8 @@ rule download_sample_cram:
         url=get_sample_cram_url
     conda:
         "../envs/awscli.yaml"
+    resources:
+        disk_mb=32768
     shell:
         "aws s3 cp {params.url} {output} --no-sign-request"
 
